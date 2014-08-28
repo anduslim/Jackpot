@@ -1,0 +1,23 @@
+id,description,quantity,image,active
+1,"Somang Beauty Pack",320,Somang_Beauty_Pack,1
+2,"United Luggage Belts",80,United_Luggage_Belts,1
+3,"Le Chocolatier Chocolate Bar",640,Le_Chocolatier_Chocolate_Bar,1
+4,"Tea Bags",80,NULL,0
+5,"Disney Umbrella",100,NULL,0
+6,"Disney Lanyard",75,NULL,0
+7,"Seaworld Luggage",40,NULL,0
+8,"Finnair Pillow",28,Finnair_Pillow,1
+9,"Hand Cream",60,Hand_Cream,1
+10,"Disney Key Holder",135,Disney_Key_Holder,1
+11,"Everland Recycle Bag",70,Everland_Recycle_Bag,1
+12,"Disney HP Stand",90,Disney_HP_Stand,1
+13,"Disney Blue Bag (Small)",70,NULL,0
+14,"Mickey and Minne Soft Toy Set",3,Mickey_and_Minne_Soft_Toy_Set,1
+15,"Costa Bear Set",16,Costa_Bear_Set,1
+16,"Sony Lanyard",60,NULL,0
+17,"Eat at Taipei $10 Voucher",1000,Eat_at_Taipei_$10_Voucher,1
+18,"Greece Holiday Land Tour",1,Greece_Holiday_Land_Tour,0
+19,"Air Tickets to Vietnam",1,Air_Tickets_to_Vietnam,0
+20,"Air Tickets to Mauritius",1,Air_Tickets_to_Mauritius,0
+21,"Air Tickets to Hainan",1,Air_Tickets_to_Hainan,0
+22,"Air Tickets to",1,NULL,0

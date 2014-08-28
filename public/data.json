@@ -1,0 +1,17 @@
+{
+	"initialSpinCount":10000,
+	"imagePath":"images/prizes_lowres/",
+	"message0":"Here we go...",
+	"message1" : "Spin those reels!",
+	"message2" : "Hit that nudge!",
+	"message3" : "So close - try again!",
+	"message4" : "Bad nudge :(",
+	"message5" : "Nice - 2 in a row :)",
+	"message6" : "YAY! 3 in a row!!!",
+	"message7" : "Game over!",
+	"faceWidth": 600,
+	"faceHeight": 280,
+	"numFaces":20
+
+
+}
