@@ -92,7 +92,7 @@ var symbols = {
                 rect: ['156px', '110px','600px','41px','auto', 'auto'],
                 text: "SPIN TO WIN",
                 align: "center",
-                font: ['holtwood-one-sc, sans-serif', 36, "rgba(212,55,87,1.00)", "400", "none", ""],
+                font: ['holtwood-one-sc, sans-serif', 28, "rgba(212,55,87,1.00)", "400", "none", ""],
                 textShadow: ["rgba(255,255,255,1.00)", 0, 2, 1]
             },
             {
@@ -334,7 +334,7 @@ var symbols = {
                 ["color", "color", 'rgba(212,55,87,1.00)'],
                 ["subproperty", "textShadow.offsetV", '2px'],
                 ["style", "left", '156px'],
-                ["style", "font-size", '36px'],
+                ["style", "font-size", '26px'],
                 ["style", "top", '110px'],
                 ["style", "line-height", '38px'],
                 ["style", "text-align", 'center'],

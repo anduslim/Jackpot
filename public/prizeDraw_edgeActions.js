@@ -314,8 +314,8 @@ var Composition = Edge.Composition, Symbol = Edge.Symbol; // aliases for commonl
       });
 
       //update the lasyWin display
-      lastWinText.html(latestPoints);
-
+/*      lastWinText.html(latestPoints);
+*/
     }
 
     function createReels(){

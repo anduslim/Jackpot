@@ -6,6 +6,7 @@
 * ability to interact with these actions from within Adobe Edge Animate
 *
 ***********************/
+var GlobalFaceID;	//FF
 (function($, Edge, compId){
 var Composition = Edge.Composition, Symbol = Edge.Symbol; // aliases for commonly used Edge classes
 
@@ -31,10 +32,45 @@ var Composition = Edge.Composition, Symbol = Edge.Symbol; // aliases for commonl
          )
          //accessible vars
 	     var body, stage, stageWidth, stageHeight, stageParent, isDevice, interactionUp, interactionDown, interactionOut, interactionOver, interactionMove;
-       var jsonData, frame, rotationStep, faceWidth, faceHeight, reelsArray, maxFaces, arm, reelContainer, nudgeBtn0, nudgeBtn1, nudgeBtn2, faceContainer0, faceContainer1, faceContainer2, nullObject,
+       var serverPrizeID, jsonPrizes, jsonData, frame, rotationStep, faceWidth, faceHeight, reelsArray, maxFaces, arm, reelContainer, nudgeBtn0, nudgeBtn1, nudgeBtn2, faceContainer0, faceContainer1, faceContainer2, nullObject,
        reel0, reel1, reel2, creditScore, spinCount, numReels,faceSymbolsArray, imagePath, willWin, message0, message1, message2, message3, message4,
        message5, message6, message7;
 	       
+        function getActivePrizes(){
+
+          $.ajax({
+            type: 'GET', 
+            url: '/prize', 
+            dataType: "json",
+            success: function(data){
+
+              jsonPrizes = data.json;
+              console.log("Successfully loaded! jsonPrizes :" + jsonPrizes[0].image + ' id:' + jsonPrizes[0].id);
+              init();
+            }, 
+            error:function(e){
+
+              alert('HTTP GET load error')
+            }
+          });
+        };
+
+        function decrementPrize(id){
+
+          $.ajax({
+            type: 'GET', 
+            url: '/prize/' + id, 
+            dataType: "json",
+            success: function(data){
+              console.log("Successfully loaded! jsonPrizes :" + data.json.image + ' id:' + data.json.id + ' active:' + data.json.active);
+            }, 
+            error:function(e){
+
+              alert('HTTP GET load error')
+            }
+          });
+        };
+
         function loadJSON(){
 
           $.ajax({
@@ -43,7 +79,8 @@ var Composition = Edge.Composition, Symbol = Edge.Symbol; // aliases for commonl
             success: function(data){
 
               jsonData = data;
-              init();
+
+              getActivePrizes();
 
             }, 
             error:function(e){
@@ -86,11 +123,11 @@ var Composition = Edge.Composition, Symbol = Edge.Symbol; // aliases for commonl
           reelContainer = sym.$('reelContainer');
 
           //array of reels and nudge buttons
-          reelsArray = [reel0, reel1, reel2];
-          nudgeBtnsArray = [nudgeBtn0, nudgeBtn1, nudgeBtn2];
+          reelsArray = [reel0]; //yc [reel0, reel1, reel2];
+          nudgeBtnsArray = []; //yc [nudgeBtn0, nudgeBtn1, nudgeBtn2];
 
           //static values - don't change these
-          numReels = 3;
+          numReels = 1; //yc 3
           fullRotation = 360;
 
 
@@ -113,7 +150,7 @@ var Composition = Edge.Composition, Symbol = Edge.Symbol; // aliases for commonl
           //if you want to add new slot graphics, create the a PNG and call it, say, mouse.png - then add it here without the .png
           //To put it another way, these all represent names of images without the file extension
           //Feel free to change the order and add/remove in the JSON file!
-          imageObjectsArray = jsonData.imageObjectsArray;
+          imageObjectsArray = jsonPrizes;
 
           //number of spins a player is allowed
           initialSpinCount = jsonData.initialSpinCount;
@@ -129,7 +166,7 @@ var Composition = Edge.Composition, Symbol = Edge.Symbol; // aliases for commonl
 
           //this can be any number above maxFaces - the higher the number, the less repetitive it will look graphically, the more processing is required.
           //edit in the JSON file
-          numFaces = jsonData.numFaces;
+          numFaces = imageObjectsArray.length; //jsonData.numFaces; 
 
 
 //**************************************************^^ EDIT THE VALUES ABOVE IN THE data.json FILE ^^****************************************************************          
@@ -192,7 +229,7 @@ var Composition = Edge.Composition, Symbol = Edge.Symbol; // aliases for commonl
           });
 
           //ensure 3D is preserved on all stage objects
-          TweenMax.set([reel0, reel1, reel2, reelContainer,  faceContainer0, faceContainer1, faceContainer2], {                      
+          TweenMax.set([ reel0, reelContainer,  faceContainer0], { //yc                      
             transformStyle:'preserve-3d'
           });
 
@@ -221,10 +258,10 @@ var Composition = Edge.Composition, Symbol = Edge.Symbol; // aliases for commonl
       //reset scores and spins
       creditScore = 0;
       spinCount = initialSpinCount;
-      updateScore(0);
+      //updateScore(0);
 
       //update displays with reset scores and spins
-      updateSpinCount();
+      //updateSpinCount();
 
       //hide all buttons
       hideNudgeButtons();
@@ -239,15 +276,15 @@ var Composition = Edge.Composition, Symbol = Edge.Symbol; // aliases for commonl
 
     }
 
-    function updateScore(latestPoints){
+    function updateScore(prize){
 
       //add what you won to the current score
-      creditScore += latestPoints;
+/*      creditScore += latestPoints;*/
       
       var display;
 
       //make it more gamey by adding zeros at the start
-      if(creditScore < 10){
+/*      if(creditScore < 10){
 
         display = '0000';
 
@@ -266,10 +303,10 @@ var Composition = Edge.Composition, Symbol = Edge.Symbol; // aliases for commonl
       } else {
 
         display = '';
-      }
+      }*/
 
       //make the final display score
-      display +=String(creditScore);
+      display = prize;
 
       //animate the display score
       TweenMax.to(creditScoreText, 1, {
@@ -278,9 +315,10 @@ var Composition = Edge.Composition, Symbol = Edge.Symbol; // aliases for commonl
       });
 
       //update the lasyWin display
-      lastWinText.html(latestPoints);
-
+/*      lastWinText.html(latestPoints);
+*/
     }
+
 
     function createReels(){
 
@@ -289,6 +327,7 @@ var Composition = Edge.Composition, Symbol = Edge.Symbol; // aliases for commonl
 
         //ref to faceContainer
         var container = sym.$('faceContainer' + q);
+        serverPrizeID = [];
 
         //create an array for each reel
         for (var a=[], t=0;t<numFaces;++t) {
@@ -296,15 +335,17 @@ var Composition = Edge.Composition, Symbol = Edge.Symbol; // aliases for commonl
         }//end for a
 
           //shuffle the reel array of numbers
-          a = shuffle(a);
+          //a = shuffle(a);
+          serverPrizeID = a;
 
           //add to a new array
           reelsFacesArray.push(a);
-
+          console.log("populating...");
           //loop through and normalise any numbers higher than maxFaces
           for(var i = 0; i < numFaces; i++){
 
-            var faceId = (a[i] > maxFaces-1) ? a[i]%maxFaces : a[i];
+            //var faceId = (a[i] > maxFaces-1) ? a[i]%maxFaces : a[i];
+			var faceId = a[i];	//FF
 
             //pull out the generic FaceSymbol and add it to one of the faceContainers
             var faceSym = sym.createChildSymbol('FaceSymbol', container);
@@ -317,6 +358,9 @@ var Composition = Edge.Composition, Symbol = Edge.Symbol; // aliases for commonl
 
             //set the empty image's source with an image
             bgImage.attr('src', imagePath + imageObjectsArray[faceId].image + '.png');
+            serverPrizeID[faceId]=imageObjectsArray[faceId].id;
+
+            console.log("faceID : " + faceId +" image" + imageObjectsArray[faceId].image + " id:" + imageObjectsArray[faceId].id);
 
             //set its faceId
             faceElement[0].faceId = faceId;
@@ -364,6 +408,8 @@ var Composition = Edge.Composition, Symbol = Edge.Symbol; // aliases for commonl
       //choose a random destination if faceId is not defined
       var numToFind = (faceId === undefined) ? Math.round(Math.random() * 10000) : faceId;
 
+	  console.log ("numToFind : " + numToFind);
+	  
       //loop through and create destinations
       for(var i = 0; i < reelsFacesArray.length; i++){
 
@@ -371,7 +417,10 @@ var Composition = Edge.Composition, Symbol = Edge.Symbol; // aliases for commonl
         if(faceId){
 
           //find the chosen destination id in reelsFacesArray
-          dest = $.inArray( numToFind, reelsFacesArray[i] );
+          //dest = $.inArray( numToFind, reelsFacesArray[i] );
+		  dest = faceId;
+		  GlobalFaceID = faceId;
+		  console.log("dest: " + dest);
 
           //push it in
           destArray.push(dest);
@@ -451,33 +500,37 @@ var Composition = Edge.Composition, Symbol = Edge.Symbol; // aliases for commonl
 
       //get a value based on each reel's landing position
       var reel0Pos = -Math.round((reelsArray[0][0]._gsTransform.rotationX % fullRotation) / rotationStep);
-      var reel1Pos = -Math.round((reelsArray[1][0]._gsTransform.rotationX % fullRotation) / rotationStep);
-      var reel2Pos = -Math.round((reelsArray[2][0]._gsTransform.rotationX % fullRotation) / rotationStep);
+      //var reel1Pos = -Math.round((reelsArray[1][0]._gsTransform.rotationX % fullRotation) / rotationStep);
+      //var reel2Pos = -Math.round((reelsArray[2][0]._gsTransform.rotationX % fullRotation) / rotationStep);
       
       //get the faceId based on the position
       var faceNumber0 = reelsFacesArray[0][reel0Pos];
       //normalise it using % if it's above maxFaces
-      faceNumber0 = (faceNumber0 >= maxFaces) ? faceNumber0%maxFaces : faceNumber0;
+      //faceNumber0 = (faceNumber0 >= maxFaces) ? faceNumber0%maxFaces : faceNumber0;	//disabled by FF
+	  faceNumber0 = GlobalFaceID;
 
       //get the faceId based on the position
-      var faceNumber1 = reelsFacesArray[1][reel1Pos];
+      //var faceNumber1 = reelsFacesArray[1][reel1Pos];
       //normalise it using % if it's above maxFaces
-      faceNumber1 = (faceNumber1 >= maxFaces) ? faceNumber1%maxFaces : faceNumber1;
+      //faceNumber1 = (faceNumber1 >= maxFaces) ? faceNumber1%maxFaces : faceNumber1;
 
       //get the faceId based on the position
-      var faceNumber2 = reelsFacesArray[2][reel2Pos];
+      //var faceNumber2 = reelsFacesArray[2][reel2Pos];
       //normalise it using % if it's above maxFaces
-      faceNumber2 = (faceNumber2 >= maxFaces) ? faceNumber2%maxFaces : faceNumber2;
+      //faceNumber2 = (faceNumber2 >= maxFaces) ? faceNumber2%maxFaces : faceNumber2;
 
       //create an array to store thr spin results
       spinFaceResult = [];
 
       //store them to be used in displayResults
+      var prizeID = serverPrizeID[faceNumber0];
+      console.log("Spin completed.");
+      console.log("faceno:" + faceNumber0 + " prizeID:" + prizeID + " image:" + imageObjectsArray[faceNumber0].image);
       spinFaceResult[0] = {image:imageObjectsArray[faceNumber0].image, symbol:faceContainer0.children()[reel0Pos]};
-      spinFaceResult[1] = {image:imageObjectsArray[faceNumber1].image, symbol:faceContainer1.children()[reel1Pos]};
-      spinFaceResult[2] = {image:imageObjectsArray[faceNumber2].image, symbol:faceContainer2.children()[reel2Pos]};
+      //spinFaceResult[1] = {image:imageObjectsArray[faceNumber1].image, symbol:faceContainer1.children()[reel1Pos]};
+      //spinFaceResult[2] = {image:imageObjectsArray[faceNumber2].image, symbol:faceContainer2.children()[reel2Pos]};
 
-      displayResults({nudge:obj.nudge});
+      displayResults({prizeID:prizeID});
     }
 
     function displayResults(obj){
@@ -485,7 +538,7 @@ var Composition = Edge.Composition, Symbol = Edge.Symbol; // aliases for commonl
       //accessible reusable vars
       var resultStr, nudgeBtnId, latestPoints;
 
-      if(spinFaceResult[0].image == spinFaceResult[1].image && spinFaceResult[1].image != spinFaceResult[2].image ){
+/*      if(spinFaceResult[0].image == spinFaceResult[1].image && spinFaceResult[1].image != spinFaceResult[2].image ){
 
         //first two are correct
 
@@ -607,10 +660,30 @@ var Composition = Edge.Composition, Symbol = Edge.Symbol; // aliases for commonl
         spinCount -= 1; 
         updateSpinCount();
        
-      }
+      }*/
+
+      //latestPoints = getPicArrayObject(0).value * 3;
+      resultStr = 'Congrats! You won ' + obj.prizeID + '!';
+
+      //Decrement prize count
+      decrementPrize(obj.prizeID );
+
+      updateScore(spinFaceResult[0].image);      
+      //updateSpinCount();
+
+
+      //animate the 3 symbols
+      var faceSymbolElements = [spinFaceResult[0].symbol];
+      TweenMax.staggerTo(faceSymbolElements, 0.13, {
+        scale:1.1,
+        //rotation:40,
+        repeat:5, 
+        yoyo:true,
+        
+        ease:Power1.easeOut
+      }, 0.05,updateSpinCount);
 
       announceMessage(resultStr);     
-
 
     }
 
@@ -682,7 +755,8 @@ var Composition = Edge.Composition, Symbol = Edge.Symbol; // aliases for commonl
     function armDragEnd(){
 
       //faceId will be a winning number
-      var faceId = Math.round(Math.random() * (numFaces-1));
+      //var faceId = Math.round(Math.random() * (numFaces-1));
+	  var faceId = Math.floor(Math.random() * (numFaces) + 1) - 1;	//FF
 
       //if you pass in the winning number (faceId) it will produce a win
       //if you want to dictate which win it will be you can pass in a specific faceId e.g. for a triple-bar pass in the 
@@ -696,7 +770,7 @@ var Composition = Edge.Composition, Symbol = Edge.Symbol; // aliases for commonl
       //spin(faceId);
 
       //enable this for random
-      spin();
+      spin(faceId);
 
       //animate the arm back to normal when drag ends (with a bit of Elastic-ness)
       TweenMax.to(arm, 0.4, {
