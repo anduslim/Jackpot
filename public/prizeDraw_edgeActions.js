@@ -7,9 +7,9 @@
 *
 ***********************/
 var GlobalFaceID;	//FF
+var GlobalSpin;
 (function($, Edge, compId){
 var Composition = Edge.Composition, Symbol = Edge.Symbol; // aliases for commonly used Edge classes
-
    //Edge symbol: 'stage'
    (function(symbolName) {
       
@@ -36,6 +36,24 @@ var Composition = Edge.Composition, Symbol = Edge.Symbol; // aliases for commonl
        reel0, reel1, reel2, creditScore, spinCount, numReels,faceSymbolsArray, imagePath, willWin, message0, message1, message2, message3, message4,
        message5, message6, message7;
 	       
+         $('body').mousedown(function(event) {
+            switch (event.which) {
+                case 1:
+                    armDragEnd();
+                    console.log('Left Mouse button pressed.');
+                    break;
+                case 2:
+                    console.log('Middle Mouse button pressed.');
+                    break;
+                case 3:
+                    console.log('Right Mouse button pressed.');
+                    break;
+                default:
+                    console.log('You have a strange Mouse!');
+            }
+        });
+
+         
         function getActivePrizes(){
 
           $.ajax({
@@ -763,7 +781,10 @@ var Composition = Edge.Composition, Symbol = Edge.Symbol; // aliases for commonl
 
       //faceId will be a winning number
       //var faceId = Math.round(Math.random() * (numFaces-1));
-	  var faceId = Math.floor(Math.random() * (numFaces) + 1) - 1;	//FF
+
+      getActivePrizes();
+
+	   var faceId = Math.floor(Math.random() * (numFaces) + 1) - 1;	//FF
 
       //if you pass in the winning number (faceId) it will produce a win
       //if you want to dictate which win it will be you can pass in a specific faceId e.g. for a triple-bar pass in the 
@@ -775,7 +796,7 @@ var Composition = Edge.Composition, Symbol = Edge.Symbol; // aliases for commonl
       
       //enable this to always win
       //spin(faceId);
-      getActivePrizes();
+      
       //enable this for random
       spin(faceId);
 
@@ -925,6 +946,8 @@ var Composition = Edge.Composition, Symbol = Edge.Symbol; // aliases for commonl
       });
       //Edge binding end
 
+      //GlobalSpin = armDragEnd;
+
    })("stage");
    //Edge symbol end:'stage'
 
@@ -942,6 +965,8 @@ var Composition = Edge.Composition, Symbol = Edge.Symbol; // aliases for commonl
    (function(symbolName) {   
    
    })("GameOverSymbol");
+
+
    //Edge symbol end:'GameOverSymbol'
 
 })(jQuery, AdobeEdge, "EDGE-545038043");
