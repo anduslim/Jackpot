@@ -61,7 +61,7 @@ var symbols = {
                 id: 'frame',
                 display: 'block',
                 type: 'image',
-                rect: ['1px', '0px','1024px','768px','auto', 'auto'],
+                rect: ['0px', '0px','1024px','768px','auto', 'auto'],
                 fill: ["rgba(0,0,0,0)",im+"frame3.png",'0px','0px']
             },
             {
@@ -70,7 +70,7 @@ var symbols = {
                 rect: ['364px', '40px','158px','46px','auto', 'auto'],
                 borderRadius: ["27px 27px", "27px 27px", "0px", "0px"],
                 fill: ["rgba(245,245,245,1.00)"],
-                stroke: [11,"rgba(163,25,50,1.00)","solid"]
+                stroke: [11,"rgba(255,162,0,1.00)","solid"]
             },
             {
                 id: 'numbersPanel',
@@ -78,7 +78,7 @@ var symbols = {
                 rect: ['141px', '93px','607px','51px','auto', 'auto'],
                 borderRadius: ["27px 27px", "27px 27px", "4px 4px", "4px 4px"],
                 fill: ["rgba(58,58,60,1.00)"],
-                stroke: [11,"rgba(163,25,50,1.00)","solid"]
+                stroke: [11,"rgba(255,162,0,1.00)","solid"]
             },
             {
                 id: 'creditScoreText',
@@ -86,8 +86,8 @@ var symbols = {
                 rect: ['156px', '110px','600px','41px','auto', 'auto'],
                 text: "SPIN & WIN!",
                 align: "center",
-                font: ['holtwood-one-sc, sans-serif', 28, "rgba(212,55,87,1.00)", "400", "none", ""],
-                textShadow: ["rgba(255,255,255,1.00)", 0, 2, 1]
+                font: ['holtwood-one-sc, sans-serif', 28, "rgba(255,255,255,1.00)", "400", "none", ""],
+                textShadow: ["rgba(92,192,56,1.00)", 0, 2, 1]
             },
             {
                 id: 'scoreLabel',
@@ -104,7 +104,7 @@ var symbols = {
                 rect: ['141px', '535px','607px','46px','auto', 'auto'],
                 borderRadius: ["4px 4px", "4px 4px", "27px 27px", "27px 27px"],
                 fill: ["rgba(58,58,60,1.00)"],
-                stroke: [11,"rgba(181,35,64,1.00)","solid"]
+                stroke: [11,"rgba(255,162,0,1.00)","solid"]
             },
             {
                 id: 'resultShadowText',
@@ -138,7 +138,7 @@ var symbols = {
                 ["style", "width", '607px'],
                 ["style", "text-align", 'center'],
                 ["style", "height", '33px'],
-                ["color", "color", 'rgba(183,41,69,1.00)'],
+                ["color", "color", 'rgba(92,192,56,1.00)'],
                 ["style", "font-family", 'alfa-slab-one, serif'],
                 ["style", "left", '152px'],
                 ["style", "font-size", '26px']
@@ -198,7 +198,7 @@ var symbols = {
                 ["style", "width", '158px'],
                 ["style", "top", '40px'],
                 ["style", "height", '46px'],
-                ["color", "border-color", 'rgba(163,25,50,1.00)'],
+                ["color", "border-color", 'rgba(92,192,56,1.00)'],
                 ["style", "border-top-right-radius", [27,27], {valueTemplate:'@@0@@px @@1@@px'} ],
                 ["style", "left", '364px']
             ],
@@ -212,7 +212,7 @@ var symbols = {
                 ["style", "top", '535px'],
                 ["style", "border-bottom-left-radius", [27,27], {valueTemplate:'@@0@@px @@1@@px'} ],
                 ["style", "height", '46px'],
-                ["color", "border-color", 'rgba(181,35,64,1.00)'],
+                ["color", "border-color", 'rgba(255,162,0,1.00)'],
                 ["style", "border-top-right-radius", [4,4], {valueTemplate:'@@0@@px @@1@@px'} ],
                 ["style", "left", '141px']
             ],
@@ -240,7 +240,7 @@ var symbols = {
                 ["style", "top", '93px'],
                 ["style", "border-bottom-left-radius", [4,4], {valueTemplate:'@@0@@px @@1@@px'} ],
                 ["style", "height", '51px'],
-                ["color", "border-color", 'rgba(163,25,50,1.00)'],
+                ["color", "border-color", 'rgba(255,162,0,1.00)'],
                 ["style", "left", '141px'],
                 ["style", "border-top-right-radius", [27,27], {valueTemplate:'@@0@@px @@1@@px'} ]
             ],
@@ -257,7 +257,7 @@ var symbols = {
             "${_creditScoreText}": [
                 ["subproperty", "textShadow.blur", '1px'],
                 ["subproperty", "textShadow.offsetH", '0px'],
-                ["color", "color", 'rgba(212,55,87,1.00)'],
+                ["color", "color", 'rgba(9255,255,255,1.00)'],
                 ["subproperty", "textShadow.offsetV", '2px'],
                 ["style", "left", '156px'],
                 ["style", "font-size", '26px'],
@@ -266,7 +266,7 @@ var symbols = {
                 ["style", "text-align", 'center'],
                 ["style", "font-family", 'holtwood-one-sc, sans-serif'],
                 ["style", "height", '35px'],
-                ["subproperty", "textShadow.color", 'rgba(255,255,255,1.00)'],
+                ["subproperty", "textShadow.color", 'rgba(92,192,56,1.00)'],
                 ["style", "width", '600px'],
                 ["style", "font-weight", '400']
             ],

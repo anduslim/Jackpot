@@ -34,8 +34,10 @@ var Composition = Edge.Composition, Symbol = Edge.Symbol; // aliases for commonl
        var body, stage, stageWidth, stageHeight, stageParent, isDevice, interactionUp, interactionDown, interactionOut, interactionOver, interactionMove;
        var serverPrizeID, jsonPrizes, jsonData, frame, rotationStep, faceWidth, faceHeight, reelsArray, maxFaces, arm, reelContainer, nudgeBtn0, nudgeBtn1, nudgeBtn2, faceContainer0, faceContainer1, faceContainer2, nullObject,
        reel0, reel1, reel2, creditScore, spinCount, numReels,faceSymbolsArray, imagePath, willWin, message0, message1, message2, message3, message4,
-       message5, message6, message7;
-         
+       message5, message6, message7, isSpinning = false, spinningSound;
+        
+       if (isSpinning == false)
+       {
          $('body').mousedown(function(event) {
             switch (event.which) {
                 case 1:
@@ -52,7 +54,7 @@ var Composition = Edge.Composition, Symbol = Edge.Symbol; // aliases for commonl
                     console.log('You have a strange Mouse!');
             }
         });
-
+        }
          
         function getActivePrizes(){
 
@@ -113,7 +115,7 @@ var Composition = Edge.Composition, Symbol = Edge.Symbol; // aliases for commonl
 
 
         function init (){
-
+          isSpinning = false;
 
           //reference to the stage
           body = $("body");
@@ -413,6 +415,11 @@ var Composition = Edge.Composition, Symbol = Edge.Symbol; // aliases for commonl
 
     function spin(faceId){
 
+      isSpinning = true;
+      spinningSound = document.createElement('audio');
+      spinningSound.setAttribute('src', 'images/wheel.mp3');
+      spinningSound.play();
+
       //disable the arm
 /*      if (armDragger != undefined)
         armDragger[0].disable();*/
@@ -512,7 +519,7 @@ var Composition = Edge.Composition, Symbol = Edge.Symbol; // aliases for commonl
       spinTimeline.vars.onCompleteParams = [{nudge:false}];
 
       //sets the speed of the entire spin - higher values mean shorter spins (0.5 is half speed and 2 is twice speed)
-      spinTimeline.timeScale(2);
+      spinTimeline.timeScale(0.2);
 
       //play the spin!
       spinTimeline.play();
@@ -521,7 +528,7 @@ var Composition = Edge.Composition, Symbol = Edge.Symbol; // aliases for commonl
 
     function spinComplete(obj){
 
-
+      spinningSound.pause();
       //get a value based on each reel's landing position
       var reel0Pos = -Math.round((reelsArray[0][0]._gsTransform.rotationX % fullRotation) / rotationStep);
       //var reel1Pos = -Math.round((reelsArray[1][0]._gsTransform.rotationX % fullRotation) / rotationStep);
@@ -552,7 +559,7 @@ var Composition = Edge.Composition, Symbol = Edge.Symbol; // aliases for commonl
       console.log("Spin completed.");
       console.log(" prizeID:" + prizeID);
         console.log(" image:" + imageObjectsArray[faceNumber0].image);
-      spinFaceResult[0] = {image:imageObjectsArray[faceNumber0].image, symbol:faceContainer0.children()[reel0Pos]};
+      spinFaceResult[0] = {description:imageObjectsArray[faceNumber0].description, image:imageObjectsArray[faceNumber0].image, symbol:faceContainer0.children()[reel0Pos]};
       //spinFaceResult[1] = {image:imageObjectsArray[faceNumber1].image, symbol:faceContainer1.children()[reel1Pos]};
       //spinFaceResult[2] = {image:imageObjectsArray[faceNumber2].image, symbol:faceContainer2.children()[reel2Pos]};
 
@@ -691,10 +698,14 @@ var Composition = Edge.Composition, Symbol = Edge.Symbol; // aliases for commonl
       //latestPoints = getPicArrayObject(0).value * 3;
       resultStr = 'Congrats! You win a prize!';
 
+      var winningSound = document.createElement('audio');
+      winningSound.setAttribute('src', 'images/winning-sound.wav');
+      winningSound.play();
+
       //Decrement prize count
       decrementPrize(obj.prizeID );
 
-      updateScore(spinFaceResult[0].image);      
+      updateScore(spinFaceResult[0].description);      
       //updateSpinCount();
 
 
@@ -816,6 +827,8 @@ var Composition = Edge.Composition, Symbol = Edge.Symbol; // aliases for commonl
     }
 
     function announceMessage(msg){
+
+
 
       //intercept it to say nothing if spinCount = 0 (game is over)
       msg = (spinCount === 0) ? '' : msg;
