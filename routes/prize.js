@@ -14,9 +14,17 @@ var handleConnection = function handleConnection(callback,req,res){
 };
 function handleGet(connection,req,res) {
 
-    connection.query('SELECT * FROM prize WHERE active = 1 ORDER BY id', function handleSql(err, rows) {
+    connection.query('SELECT * FROM prize WHERE quantity > 0 AND (active = 1 OR (active_time IS NOT NULL AND TIMESTAMPDIFF(SECOND, NOW(), active_time) < 0)) ORDER BY id', function handleSql(err, rows) {
         if (err){ logAndRespond(err,res); return; }
         if (rows.length === 0){ res.send(204); return; }
+        var row = [];
+        for (var i = 0; i < rows.length; i++) {
+            console.log(rows[i]);
+            if (rows[i].active_time != null )
+                row.push(rows[i]);
+        }
+        console.log("Row length:" + row);
+        if (row.length > 0) {rows = row;}
         res.send({
             result: 'success',
             err:    '',

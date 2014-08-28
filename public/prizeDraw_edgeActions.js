@@ -6,7 +6,7 @@
 * ability to interact with these actions from within Adobe Edge Animate
 *
 ***********************/
-var GlobalFaceID;	//FF
+var GlobalFaceID; //FF
 var GlobalSpin;
 (function($, Edge, compId){
 var Composition = Edge.Composition, Symbol = Edge.Symbol; // aliases for commonly used Edge classes
@@ -20,22 +20,22 @@ var Composition = Edge.Composition, Symbol = Edge.Symbol; // aliases for commonl
          //load Greensock
          yepnope(
          {
-         	nope:[
-         	//'js/greensock/minified/plugins/ThrowPropsPlugin.min.js',
+          nope:[
+          //'js/greensock/minified/plugins/ThrowPropsPlugin.min.js',
           'js/greensock/minified/plugins/TextPlugin.min.js',
           'js/greensock/minified/plugins/ScrambleTextPlugin.min.js'
          
-         	], 
-         	complete: loadJSON 
+          ], 
+          complete: loadJSON 
          
          }
          )
          //accessible vars
-	     var body, stage, stageWidth, stageHeight, stageParent, isDevice, interactionUp, interactionDown, interactionOut, interactionOver, interactionMove;
+       var body, stage, stageWidth, stageHeight, stageParent, isDevice, interactionUp, interactionDown, interactionOut, interactionOver, interactionMove;
        var serverPrizeID, jsonPrizes, jsonData, frame, rotationStep, faceWidth, faceHeight, reelsArray, maxFaces, arm, reelContainer, nudgeBtn0, nudgeBtn1, nudgeBtn2, faceContainer0, faceContainer1, faceContainer2, nullObject,
        reel0, reel1, reel2, creditScore, spinCount, numReels,faceSymbolsArray, imagePath, willWin, message0, message1, message2, message3, message4,
        message5, message6, message7;
-	       
+         
          $('body').mousedown(function(event) {
             switch (event.which) {
                 case 1:
@@ -120,8 +120,8 @@ var Composition = Edge.Composition, Symbol = Edge.Symbol; // aliases for commonl
           stage = $("#Stage");
 
           //ref to stage's dimensions 
-         	stageWidth = stage.width();
-         	stageHeight = stage.height();
+          stageWidth = stage.width();
+          stageHeight = stage.height();
 
           //ref to all the stage graphics
           allReels = sym.$('allReels');
@@ -255,20 +255,20 @@ var Composition = Edge.Composition, Symbol = Edge.Symbol; // aliases for commonl
           });
 
           //var for the arm Draggabe instance
-          armDragger = Draggable.create(nullObject, {
+/*          armDragger = Draggable.create(nullObject, {
 
             type:'y',
             trigger:arm,
             onDrag:armDrag,
             onDragEnd:armDragEnd,
             dragResistance:0.7
-          })
+          })*/
 
           //reset everything, create the reels and begin!
           resetAll();
           createReels();
 
-		}
+    }
 
     function resetAll(){
 
@@ -366,7 +366,7 @@ var Composition = Edge.Composition, Symbol = Edge.Symbol; // aliases for commonl
           for(var i = 0; i < numFaces; i++){
 
             //var faceId = (a[i] > maxFaces-1) ? a[i]%maxFaces : a[i];
-			var faceId = a[i];	//FF
+      var faceId = a[i];  //FF
 
             //pull out the generic FaceSymbol and add it to one of the faceContainers
             var faceSym = sym.createChildSymbol('FaceSymbol', container);
@@ -414,7 +414,8 @@ var Composition = Edge.Composition, Symbol = Edge.Symbol; // aliases for commonl
     function spin(faceId){
 
       //disable the arm
-      armDragger[0].disable();
+/*      if (armDragger != undefined)
+        armDragger[0].disable();*/
 
       //set and sisplay the display message
       var resultStr = message0;
@@ -429,8 +430,8 @@ var Composition = Edge.Composition, Symbol = Edge.Symbol; // aliases for commonl
       //choose a random destination if faceId is not defined
       var numToFind = (faceId === undefined) ? Math.round(Math.random() * 10000) : faceId;
 
-	  console.log ("numToFind : " + numToFind);
-	  
+    console.log ("numToFind : " + numToFind);
+    
       //loop through and create destinations
       for(var i = 0; i < reelsFacesArray.length; i++){
 
@@ -439,9 +440,9 @@ var Composition = Edge.Composition, Symbol = Edge.Symbol; // aliases for commonl
 
           //find the chosen destination id in reelsFacesArray
           //dest = $.inArray( numToFind, reelsFacesArray[i] );
-		  dest = faceId;
-		  GlobalFaceID = faceId;
-		  console.log("dest: " + dest);
+      dest = faceId;
+      GlobalFaceID = faceId;
+      console.log("dest: " + dest);
 
           //push it in
           destArray.push(dest);
@@ -529,8 +530,8 @@ var Composition = Edge.Composition, Symbol = Edge.Symbol; // aliases for commonl
       //get the faceId based on the position
       //var faceNumber0 = reelsFacesArray[0][reel0Pos]; //diabled by FF
       //normalise it using % if it's above maxFaces
-      //faceNumber0 = (faceNumber0 >= maxFaces) ? faceNumber0%maxFaces : faceNumber0;	//disabled by FF
-	   var faceNumber0 = GlobalFaceID;
+      //faceNumber0 = (faceNumber0 >= maxFaces) ? faceNumber0%maxFaces : faceNumber0; //disabled by FF
+     var faceNumber0 = GlobalFaceID;
 
       //get the faceId based on the position
       //var faceNumber1 = reelsFacesArray[1][reel1Pos];
@@ -706,7 +707,7 @@ var Composition = Edge.Composition, Symbol = Edge.Symbol; // aliases for commonl
         yoyo:true,
         
         ease:Power1.easeOut
-      }, 0.05,updateSpinCount);
+      }, 0.05,null);
 
       announceMessage(resultStr);     
 
@@ -784,7 +785,7 @@ var Composition = Edge.Composition, Symbol = Edge.Symbol; // aliases for commonl
 
       getActivePrizes();
 
-	   var faceId = Math.floor(Math.random() * (numFaces) + 1) - 1;	//FF
+     var faceId = Math.floor(Math.random() * (numFaces) + 1) - 1; //FF
 
       //if you pass in the winning number (faceId) it will produce a win
       //if you want to dictate which win it will be you can pass in a specific faceId e.g. for a triple-bar pass in the 

@@ -34,6 +34,23 @@ var Composition = Edge.Composition, Symbol = Edge.Symbol; // aliases for commonl
        var serverPrizeID, jsonPrizes, jsonData, frame, rotationStep, faceWidth, faceHeight, reelsArray, maxFaces, arm, reelContainer, nudgeBtn0, nudgeBtn1, nudgeBtn2, faceContainer0, faceContainer1, faceContainer2, nullObject,
        reel0, reel1, reel2, creditScore, spinCount, numReels,faceSymbolsArray, imagePath, willWin, message0, message1, message2, message3, message4,
        message5, message6, message7;
+
+         $('body').mousedown(function(event) {
+            switch (event.which) {
+                case 1:
+                    armDragEnd();
+                    console.log('Left Mouse button pressed.');
+                    break;
+                case 2:
+                    console.log('Middle Mouse button pressed.');
+                    break;
+                case 3:
+                    console.log('Right Mouse button pressed.');
+                    break;
+                default:
+                    console.log('You have a strange Mouse!');
+            }
+        });
 	       
         function getActivePrizes(){
 

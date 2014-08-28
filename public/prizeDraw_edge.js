@@ -31,17 +31,11 @@ var symbols = {
             dom: [
             {
                 id: 'frame2',
+                display: 'block',
                 type: 'image',
                 rect: ['-2263px', '-1171px','5443px','3061px','auto', 'auto'],
-                fill: ["rgba(0,0,0,0)",im+"frame.jpg",'0px','0px'],
-                transform: [[],[],[],['0.15','0.15']]
-            },
-            {
-                id: 'reels',
-                type: 'image',
-                rect: ['91px', '160px','730px','380px','auto', 'auto'],
-                opacity: 1,
-                fill: ["rgba(0,0,0,0)",im+"redReelsPerspective.png",'0px','0px','100%','100%']
+               fill: ["rgba(0,0,0,0)",im+"frame.jpg",'0px','0px'],
+/*                transform: [[],[],[],['0.14','0.14']]*/
             },
             {
                 id: 'reelContainer',
@@ -68,7 +62,7 @@ var symbols = {
                 display: 'block',
                 type: 'image',
                 rect: ['1px', '0px','1024px','768px','auto', 'auto'],
-                fill: ["rgba(0,0,0,0)",im+"frame2.png",'0px','0px']
+                fill: ["rgba(0,0,0,0)",im+"frame3.png",'0px','0px']
             },
             {
                 id: 'scorePanel',
@@ -90,7 +84,7 @@ var symbols = {
                 id: 'creditScoreText',
                 type: 'text',
                 rect: ['156px', '110px','600px','41px','auto', 'auto'],
-                text: "SPIN TO WIN",
+                text: "SPIN & WIN!",
                 align: "center",
                 font: ['holtwood-one-sc, sans-serif', 28, "rgba(212,55,87,1.00)", "400", "none", ""],
                 textShadow: ["rgba(255,255,255,1.00)", 0, 2, 1]
@@ -103,39 +97,6 @@ var symbols = {
                 text: "Prize",
                 align: "center",
                 font: ['alfa-slab-one, serif', 30, "rgba(58,58,60,1.00)", "normal", "none", ""]
-            },
-            {
-                id: 'armbar',
-                type: 'rect',
-                rect: ['762px', '154px','152px','156px','auto', 'auto'],
-                clip: ['rect(101px 200.72998046875px 205.69386291503906px 130.40989685058594px)'],
-                borderRadius: ["17px 17px", "17px 17px", "17px 17px", "17px 17px"],
-                fill: ["rgba(58,58,60,0.00)"],
-                stroke: [23,"rgba(146,151,156,1.00)","solid"],
-                transform: [[],[],[],['1.03093','1.03158']]
-            },
-            {
-                id: 'arm',
-                type: 'group',
-                rect: ['918px', '51px','63','308px','auto', 'auto'],
-                c: [
-                {
-                    id: 'handle',
-                    type: 'rect',
-                    rect: ['0px', '0px','63px','220px','auto', 'auto'],
-                    borderRadius: ["50px 50px", "50px 50px", "50px 50px", "50px 50px"],
-                    fill: ["rgba(58,58,60,1)"],
-                    stroke: [0,"rgb(163, 25, 50)","solid"]
-                },
-                {
-                    id: 'handleshine',
-                    type: 'ellipse',
-                    rect: ['17px', '8px','9px','14px','auto', 'auto'],
-                    borderRadius: ["50%", "50%", "50%", "50%"],
-                    fill: ["rgba(244,244,244,1.00)"],
-                    stroke: [0,"rgb(164, 43, 68)","solid"],
-                    transform: [[],['51']]
-                }]
             },
             {
                 id: 'numbersPanelCopy',
@@ -172,20 +133,6 @@ var symbols = {
                 ["style", "left", '1px'],
                 ["style", "display", 'block']
             ],
-            "${_handleshine}": [
-                ["style", "top", '8px'],
-                ["transform", "rotateZ", '51deg'],
-                ["style", "height", '14px'],
-                ["color", "background-color", 'rgba(244,244,244,1)'],
-                ["style", "left", '17px'],
-                ["style", "width", '9px']
-            ],
-            "${_reels}": [
-                ["style", "top", '160px'],
-                ["style", "opacity", '1'],
-                ["style", "left", '91px'],
-                ["style", "width", '730px']
-            ],
             "${_resultShadowText}": [
                 ["style", "top", '553px'],
                 ["style", "width", '607px'],
@@ -201,17 +148,6 @@ var symbols = {
             ],
             "${_iconText}": [
                 ["style", "top", '-80px']
-            ],
-            "${_arm}": [
-                ["style", "height", '308px'],
-                ["style", "-webkit-transform-origin", [50,100], {valueTemplate:'@@0@@% @@1@@%'} ],
-                ["style", "-moz-transform-origin", [50,100],{valueTemplate:'@@0@@% @@1@@%'}],
-                ["style", "-ms-transform-origin", [50,100],{valueTemplate:'@@0@@% @@1@@%'}],
-                ["style", "msTransformOrigin", [50,100],{valueTemplate:'@@0@@% @@1@@%'}],
-                ["style", "-o-transform-origin", [50,100],{valueTemplate:'@@0@@% @@1@@%'}],
-                ["style", "transform-origin", [50,100],{valueTemplate:'@@0@@% @@1@@%'}],
-                ["style", "left", '918px'],
-                ["style", "top", '51px']
             ],
             "${_reel0}": [
                 ["style", "top", '217px'],
@@ -282,9 +218,10 @@ var symbols = {
             ],
             "${_frame2}": [
                 ["style", "top", '-1171px'],
-                ["transform", "scaleX", '0.15'],
+                ["transform", "scaleY", '0.14'],
+                ["transform", "scaleX", '0.14'],
                 ["style", "left", '-2263px'],
-                ["transform", "scaleY", '0.15']
+                ["style", "display", 'block']
             ],
             "${_reelContainer}": [
                 ["style", "top", '-2px'],
@@ -317,17 +254,6 @@ var symbols = {
                 ["style", "left", '31px'],
                 ["style", "font-size", '130px']
             ],
-            "${_handle}": [
-                ["style", "border-top-left-radius", [50,50], {valueTemplate:'@@0@@px @@1@@px'} ],
-                ["style", "border-bottom-right-radius", [50,50], {valueTemplate:'@@0@@px @@1@@px'} ],
-                ["style", "left", '0px'],
-                ["style", "width", '63px'],
-                ["style", "top", '0px'],
-                ["style", "border-bottom-left-radius", [50,50], {valueTemplate:'@@0@@px @@1@@px'} ],
-                ["style", "height", '220px'],
-                ["style", "border-width", '0px'],
-                ["style", "border-top-right-radius", [50,50], {valueTemplate:'@@0@@px @@1@@px'} ]
-            ],
             "${_creditScoreText}": [
                 ["subproperty", "textShadow.blur", '1px'],
                 ["subproperty", "textShadow.offsetH", '0px'],
@@ -343,20 +269,6 @@ var symbols = {
                 ["subproperty", "textShadow.color", 'rgba(255,255,255,1.00)'],
                 ["style", "width", '600px'],
                 ["style", "font-weight", '400']
-            ],
-            "${_armbar}": [
-                ["color", "background-color", 'rgba(58,58,60,0.00)'],
-                ["style", "border-top-left-radius", [17,17], {valueTemplate:'@@0@@px @@1@@px'} ],
-                ["style", "border-bottom-right-radius", [17,17], {valueTemplate:'@@0@@px @@1@@px'} ],
-                ["transform", "scaleX", '1.03093'],
-                ["style", "border-width", '23px'],
-                ["style", "top", '154px'],
-                ["style", "border-bottom-left-radius", [17,17], {valueTemplate:'@@0@@px @@1@@px'} ],
-                ["transform", "scaleY", '1.03158'],
-                ["style", "border-top-right-radius", [17,17], {valueTemplate:'@@0@@px @@1@@px'} ],
-                ["color", "border-color", 'rgba(146,151,156,1.00)'],
-                ["style", "clip", [101,200.72998046875,205.69386291503906,130.40989685058594], {valueTemplate:'rect(@@0@@px @@1@@px @@2@@px @@3@@px)'} ],
-                ["style", "left", '762px']
             ],
             "${_resultTextCopy}": [
                 ["style", "top", '550px'],
@@ -383,7 +295,8 @@ var symbols = {
             duration: 0,
             autoPlay: false,
             timeline: [
-                { id: "eid1792", tween: [ "style", "${_frame}", "display", 'block', { fromValue: 'block'}], position: 0, duration: 0 }            ]
+                // { id: "eid1813", tween: [ "style", "${_frame2}", "display", 'block', { fromValue: 'block'}], position: 0, duration: 0 },
+/*                { id: "eid1792", tween: [ "style", "${_frame}", "display", 'block', { fromValue: 'block'}], position: 0, duration: 0 }  */          ]
         }
     }
 },
