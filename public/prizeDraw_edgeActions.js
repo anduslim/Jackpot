@@ -41,8 +41,8 @@ var Composition = Edge.Composition, Symbol = Edge.Symbol; // aliases for commonl
          $('body').mousedown(function(event) {
             switch (event.which) {
                 case 1:
-                    armDragEnd();
-                    console.log('Left Mouse button pressed.');
+      		          getActivePrizes(1);
+                    //console.log('Left Mouse button pressed.');
                     break;
                 case 2:
                     console.log('Middle Mouse button pressed.');
@@ -56,8 +56,8 @@ var Composition = Edge.Composition, Symbol = Edge.Symbol; // aliases for commonl
         });
         }
          
-        function getActivePrizes(){
-
+        function getActivePrizes(middle){
+	        var Pull = middle;
           $.ajax({
             type: 'GET', 
             url: '/prize', 
@@ -66,9 +66,19 @@ var Composition = Edge.Composition, Symbol = Edge.Symbol; // aliases for commonl
               if (data == undefined)
                 alert("No more prizes!");
               else {
+	
                 jsonPrizes = data.json;
-                console.log("Successfully loaded! jsonPrizes :" + jsonPrizes[0].image + ' id:' + jsonPrizes[0].id);
-                init();
+                console.log("Successfully loaded! jsonPrizes :" + jsonPrizes[0].image + ' id:' + jsonPrizes[0].id + ' grandprize:' + data.grandprize);
+                if (middle == 1) {
+            		  init();
+                  if (data.grandprize == 0)
+            		    armDragEnd();
+                  else
+                    armDragEnd(prizeToFaceIdMapping(data.grandprize));
+            		}
+            		else {
+            			init();
+            		}
               }
             }, 
             error:function(e){
@@ -85,7 +95,7 @@ var Composition = Edge.Composition, Symbol = Edge.Symbol; // aliases for commonl
             url: '/prize/' + id, 
             dataType: "json",
             success: function(data){
-              console.log("Successfully loaded! jsonPrizes :" + data.json.image + ' id:' + data.json.id + ' active:' + data.json.active);
+              console.log("Successfully decrementPrize! jsonPrizes :" + data.json.image + ' id:' + data.json.id + ' active:' + data.json.active);
             }, 
             error:function(e){
 
@@ -103,7 +113,7 @@ var Composition = Edge.Composition, Symbol = Edge.Symbol; // aliases for commonl
 
               jsonData = data;
 
-              getActivePrizes();
+              getActivePrizes(0);
 
             }, 
             error:function(e){
@@ -128,11 +138,11 @@ var Composition = Edge.Composition, Symbol = Edge.Symbol; // aliases for commonl
           //ref to all the stage graphics
           allReels = sym.$('allReels');
           reel0 = sym.$('reel0');
-          reel1 = sym.$('reel1');
-          reel2 = sym.$('reel2');
-          nudgeBtn0 = sym.$('nudgeBtn0');
+/*          reel1 = sym.$('reel1');
+          reel2 = sym.$('reel2');*/
+/*          nudgeBtn0 = sym.$('nudgeBtn0');
           nudgeBtn1 = sym.$('nudgeBtn1');
-          nudgeBtn2 = sym.$('nudgeBtn2');
+          nudgeBtn2 = sym.$('nudgeBtn2');*/
           creditScoreText = sym.$('creditScoreText');
           spinCountText = sym.$('spinCountText');
           lastWinText = sym.$('lastWinText');
@@ -140,9 +150,9 @@ var Composition = Edge.Composition, Symbol = Edge.Symbol; // aliases for commonl
           arm = sym.$('arm');          
           resultText = sym.$('resultText');
           resultShadowText = sym.$('resultShadowText');
-          faceContainer0 = sym.$('faceContainer0');
+          faceContainer0 = sym.$('faceContainer0');/*
           faceContainer1 = sym.$('faceContainer1');
-          faceContainer2 = sym.$('faceContainer2');
+          faceContainer2 = sym.$('faceContainer2');*/
           reelContainer = sym.$('reelContainer');
 
           //array of reels and nudge buttons
@@ -291,8 +301,8 @@ var Composition = Edge.Composition, Symbol = Edge.Symbol; // aliases for commonl
 
       //remove all the images in the reels
       faceContainer0.empty();
-      faceContainer1.empty();
-      faceContainer2.empty();
+/*      faceContainer1.empty();
+      faceContainer2.empty();*/
 
       //set a message
       announceMessage(message1);
@@ -363,12 +373,12 @@ var Composition = Edge.Composition, Symbol = Edge.Symbol; // aliases for commonl
 
           //add to a new array
           reelsFacesArray.push(a);
-          console.log("populating...");
+          //console.log("populating...");
           //loop through and normalise any numbers higher than maxFaces
           for(var i = 0; i < numFaces; i++){
 
             //var faceId = (a[i] > maxFaces-1) ? a[i]%maxFaces : a[i];
-      var faceId = a[i];  //FF
+            var faceId = a[i];  //FF
 
             //pull out the generic FaceSymbol and add it to one of the faceContainers
             var faceSym = sym.createChildSymbol('FaceSymbol', container);
@@ -383,7 +393,7 @@ var Composition = Edge.Composition, Symbol = Edge.Symbol; // aliases for commonl
             bgImage.attr('src', imagePath + imageObjectsArray[faceId].image + '.png');
             serverPrizeID[faceId]=imageObjectsArray[faceId].id;
 
-            console.log("faceID : " + faceId +" image" + imageObjectsArray[faceId].image + " id:" + imageObjectsArray[faceId].id);
+            //console.log("faceID : " + faceId +" image" + imageObjectsArray[faceId].image + " id:" + imageObjectsArray[faceId].id);
 
             //set its faceId
             faceElement[0].faceId = faceId;
@@ -435,10 +445,10 @@ var Composition = Edge.Composition, Symbol = Edge.Symbol; // aliases for commonl
       var dest;
 
       //choose a random destination if faceId is not defined
-      var numToFind = (faceId === undefined) ? Math.round(Math.random() * 10000) : faceId;
+      var numToFind = (faceId === undefined) ? (Math.floor(Math.random() * (numFaces) + 1) - 1): faceId;
 
-    console.log ("numToFind : " + numToFind);
-    
+      console.log ("spinning chosen num (numToFind) : " + numToFind);
+      GlobalFaceID = numToFind;
       //loop through and create destinations
       for(var i = 0; i < reelsFacesArray.length; i++){
 
@@ -447,8 +457,8 @@ var Composition = Edge.Composition, Symbol = Edge.Symbol; // aliases for commonl
 
           //find the chosen destination id in reelsFacesArray
           //dest = $.inArray( numToFind, reelsFacesArray[i] );
-      dest = faceId;
-      GlobalFaceID = faceId;
+      dest = numToFind;
+ 
       console.log("dest: " + dest);
 
           //push it in
@@ -519,7 +529,7 @@ var Composition = Edge.Composition, Symbol = Edge.Symbol; // aliases for commonl
       spinTimeline.vars.onCompleteParams = [{nudge:false}];
 
       //sets the speed of the entire spin - higher values mean shorter spins (0.5 is half speed and 2 is twice speed)
-      spinTimeline.timeScale(0.2);
+      spinTimeline.timeScale(0.18);
 
       //play the spin!
       spinTimeline.play();
@@ -538,17 +548,13 @@ var Composition = Edge.Composition, Symbol = Edge.Symbol; // aliases for commonl
       //var faceNumber0 = reelsFacesArray[0][reel0Pos]; //diabled by FF
       //normalise it using % if it's above maxFaces
       //faceNumber0 = (faceNumber0 >= maxFaces) ? faceNumber0%maxFaces : faceNumber0; //disabled by FF
-     var faceNumber0 = GlobalFaceID;
-
-      //get the faceId based on the position
-      //var faceNumber1 = reelsFacesArray[1][reel1Pos];
-      //normalise it using % if it's above maxFaces
-      //faceNumber1 = (faceNumber1 >= maxFaces) ? faceNumber1%maxFaces : faceNumber1;
-
-      //get the faceId based on the position
-      //var faceNumber2 = reelsFacesArray[2][reel2Pos];
-      //normalise it using % if it's above maxFaces
-      //faceNumber2 = (faceNumber2 >= maxFaces) ? faceNumber2%maxFaces : faceNumber2;
+      var faceNumber0 = (GlobalFaceID%imageObjectsArray.length);
+      reel0Pos = (reel0Pos%imageObjectsArray.length);
+    	if (imageObjectsArray.length == 1)
+    	{
+    		reel0Pos = 0;
+    		faceNumber0 = 0;
+    	}
 
       //create an array to store thr spin results
       spinFaceResult = [];
@@ -558,10 +564,8 @@ var Composition = Edge.Composition, Symbol = Edge.Symbol; // aliases for commonl
       var prizeID = serverPrizeID[faceNumber0];
       console.log("Spin completed.");
       console.log(" prizeID:" + prizeID);
-        console.log(" image:" + imageObjectsArray[faceNumber0].image);
+      console.log(" image:" + imageObjectsArray[faceNumber0].image);
       spinFaceResult[0] = {description:imageObjectsArray[faceNumber0].description, image:imageObjectsArray[faceNumber0].image, symbol:faceContainer0.children()[reel0Pos]};
-      //spinFaceResult[1] = {image:imageObjectsArray[faceNumber1].image, symbol:faceContainer1.children()[reel1Pos]};
-      //spinFaceResult[2] = {image:imageObjectsArray[faceNumber2].image, symbol:faceContainer2.children()[reel2Pos]};
 
       displayResults({prizeID:prizeID});
     }
@@ -570,130 +574,6 @@ var Composition = Edge.Composition, Symbol = Edge.Symbol; // aliases for commonl
 
       //accessible reusable vars
       var resultStr, nudgeBtnId, latestPoints;
-
-/*      if(spinFaceResult[0].image == spinFaceResult[1].image && spinFaceResult[1].image != spinFaceResult[2].image ){
-
-        //first two are correct
-
-        //if it was the result of a nudge
-        if(obj.nudge === true){
-
-          //get the value of the image and multiply by 2 (as there are 2 of them!)
-          latestPoints = getPicArrayObject(0).value * 2;
-          //resultStr = 'You earned ' + latestPoints + ' credits!';
-          resultStr = message5;
-
-          updateScore(latestPoints);
-
-          hideNudgeButtons();
-          spinCount -= 1; 
-
-          //animate the 2 symbols
-          var faceSymbolElements = [spinFaceResult[0].symbol, spinFaceResult[1].symbol ];
-          TweenMax.staggerTo(faceSymbolElements, 0.13, {
-            scale:1.1,
-            //rotation:40,
-            repeat:5, 
-            yoyo:true,
-            
-            ease:Power1.easeOut
-          }, 0.05, updateSpinCount);
-
-
-        } else {
-
-          //it wasn't a nudge so enable the budge button
-          nudgeBtnId = 2;
-
-          resultStr = message2;
-
-          showNudgeButton(nudgeBtnId);
-
-          nudgeBtn2.one(interactionUp, {reelId:2}, nudgeReel);
-       
-        }
-
-      } else if (spinFaceResult[0].image == spinFaceResult[1].image && spinFaceResult[1].image == spinFaceResult[2].image){
-
-        //YOU WON 3 IN A ROW!
-        latestPoints = getPicArrayObject(0).value * 3;
-        resultStr = '3  ' + spinFaceResult[0].image + ' symbols in a row!';
-        //resultStr = message6;
-
-        hideNudgeButtons();
-
-        updateScore(latestPoints);
-        spinCount -= 1; 
-        //updateSpinCount();
-
-
-        //animate the 3 symbols
-        var faceSymbolElements = [spinFaceResult[0].symbol, spinFaceResult[1].symbol, spinFaceResult[2].symbol ];
-        TweenMax.staggerTo(faceSymbolElements, 0.13, {
-          scale:1.1,
-          //rotation:40,
-          repeat:5, 
-          yoyo:true,
-          
-          ease:Power1.easeOut
-        }, 0.05,updateSpinCount);
-
-
-     } else if (spinFaceResult[1].image == spinFaceResult[2].image && spinFaceResult[1].image != spinFaceResult[0].image){
-
-        //first one is wrong
-
-        if(obj.nudge == true){
-
-          resultStr = message3;
-          hideNudgeButtons();
-
-          spinCount -= 1; 
-          updateSpinCount();
-
-        } else {
-
-            nudgeBtnId = 0;
-            resultStr = message2;
-            showNudgeButton(nudgeBtnId);
-
-            nudgeBtn0.one(interactionUp, {reelId:0}, nudgeReel);
-       
-        }
-
-
-     }else if (spinFaceResult[0].image == spinFaceResult[2].image && spinFaceResult[1].image != spinFaceResult[0].image){
-
-        //middle one is wrong
-        if(obj.nudge === true){
-
-          resultStr = message4;
-          hideNudgeButtons();
-
-          spinCount -= 1; 
-          updateSpinCount();
-
-        } else {
-
-          nudgeBtnId = 1;
-          resultStr = 'NUDGE TIME!!';
-          showNudgeButton(nudgeBtnId);
-
-          nudgeBtn1.one(interactionUp, {reelId:1},nudgeReel);
-       
-        }
-
-
-
-     } else {
-
-        resultStr = 'Spin those reels!';
-        hideNudgeButtons();
-
-        spinCount -= 1; 
-        updateSpinCount();
-       
-      }*/
 
       //latestPoints = getPicArrayObject(0).value * 3;
       resultStr = 'Congrats! You win a prize!';
@@ -789,15 +669,23 @@ var Composition = Edge.Composition, Symbol = Edge.Symbol; // aliases for commonl
 
     }
 
-    function armDragEnd(){
+    function prizeToFaceIdMapping(prizeID) {
+      for (var i=0; i <imageObjectsArray.length; i++) {
+        if (serverPrizeID[i] == prizeID)
+          return i;
+      }
+    }
+
+    function armDragEnd(faceId){
 
       //faceId will be a winning number
       //var faceId = Math.round(Math.random() * (numFaces-1));
-
-      getActivePrizes();
-
-     var faceId = Math.floor(Math.random() * (numFaces) + 1) - 1; //FF
-
+      if (numFaces == 1) {
+      	 faceId = 0;
+      }
+/*      else
+        faceId = Math.floor(Math.random() * (numFaces) + 1) - 1; //FF*/
+      console.log("armDrag faceId:" + faceId);
       //if you pass in the winning number (faceId) it will produce a win
       //if you want to dictate which win it will be you can pass in a specific faceId e.g. for a triple-bar pass in the 
       //corresponding imageObjectsArray position of triple-bar which is 6

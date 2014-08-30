@@ -17,19 +17,36 @@ function handleGet(connection,req,res) {
     connection.query('SELECT * FROM prize WHERE quantity > 0 AND (active = 1 OR (active_time IS NOT NULL AND TIMESTAMPDIFF(SECOND, NOW(), active_time) < 0)) ORDER BY id', function handleSql(err, rows) {
         if (err){ logAndRespond(err,res); return; }
         if (rows.length === 0){ res.send(204); return; }
-        var row = [];
+        var row = [], temp = [], grandPrize = 0;
         for (var i = 0; i < rows.length; i++) {
-            console.log(rows[i]);
-            if (rows[i].active_time != null )
+            //console.log(rows[i]);
+            if (rows[i].active_time != null ) {
+                grandPrize = rows[i].id;
                 row.push(rows[i]);
+            }
         }
-        console.log("Row length:" + row);
-        if (row.length > 0) {rows = row;}
+        //console.log("Row length:" + row);
+       if (rows.length == 1) {
+            temp.push(rows[0]); 
+            temp.push(rows[0]); 
+            rows = temp;
+        }  
+        if ((row.length == 1) && (rows.length == 0)) {
+            temp.push(row[0]); 
+            temp.push(row[0]); 
+            rows = temp;
+        }  
+        console.log("row leng: " + row.length);
+/*        if (row.length > 0) {
+            rows = row;
+        }*/
+        console.log("after row leng: " + row.length);
         res.send({
             result: 'success',
             err:    '',
             json:   rows,
-            length: rows.length
+            length: rows.length,
+            grandprize: grandPrize
         });
         connection.release();
     });
