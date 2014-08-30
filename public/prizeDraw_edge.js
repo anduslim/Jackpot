@@ -130,7 +130,7 @@ var symbols = {
         "Base State": {
             "${_frame}": [
                 ["style", "top", '0px'],
-                ["style", "left", '1px'],
+                ["style", "left", '0px'],
                 ["style", "display", 'block']
             ],
             "${_resultShadowText}": [
